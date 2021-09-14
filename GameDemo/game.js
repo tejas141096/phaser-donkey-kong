@@ -2,7 +2,7 @@ var config=
 {
     type: Phaser.AUTO,
     width: 800,
-    height: 600,
+    height: 950,
     physics:
     {
         default: 'arcade',
@@ -55,6 +55,7 @@ function create()
     player=this.physics.add.sprite(100,450,'dude');
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
+    player.setScale(0.5,0.5)
 
     this.anims.create
     (
