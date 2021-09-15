@@ -2,13 +2,17 @@ var config=
 {
     type: Phaser.AUTO,
     width: 800,
-    height: 950,
-    physics:
+    height: 960,
+	scale: 
+	{
+    	autoCenter: Phaser.Scale.CENTER_BOTH
+  	},
+    physics: 
     {
         default: 'arcade',
         arcade:
         {
-            gravity: {y:300},
+            gravity: {y:600},
             debug: false
         }
     },
@@ -19,6 +23,7 @@ var config=
         update : update
     }
 };
+
 var game = new Phaser.Game(config);
 
 var platforms;
@@ -28,7 +33,6 @@ var stars;
 var score=0;
 var scoreText;
 var bombs;
-var gameOver;
 function preload()
 {
     this.load.image('sky','assets/sky.png');
@@ -40,22 +44,31 @@ function preload()
 
 function create()
 {
-    this.add.image(400,300,'sky');
+    //game.plugins.add(Phaser.Plugin.ArcadeSlopes);
 
+    this.add.image(400,300,'sky').setScale(2.5);
     platforms=this.physics.add.staticGroup();
-    platforms.create(400,568,'ground').setScale(2).refreshBody();
+    platforms.create(400,960,'ground').setScale(2).refreshBody();
 
-    platforms.create(600,450,'ground');
-    platforms.create(50,250,'ground');
-    platforms.create(100,400,'ground');
-    platforms.create(0,100,'ground');
-    platforms.create(750,300,'ground');
-    platforms.create(800,150,'ground');
+    var plat1 = platforms.create(100,200,'ground');
+    plat1.setScale(2,1).refreshBody();
 
-    player=this.physics.add.sprite(100,450,'dude');
+    var plat2=platforms.create(600,350,'ground');
+    plat2.setScale(2,1).refreshBody();
+
+    var plat3=platforms.create(100,500,'ground');
+    plat3.setScale(2,1).refreshBody();
+
+    var plat4=platforms.create(600,650,'ground');
+    plat4.setScale(2,1).refreshBody();
+
+    var plat5=platforms.create(100,800,'ground');
+    plat5.setScale(2,1).refreshBody();
+
+
+    player=this.physics.add.sprite(100,850,'dude');
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
-    player.setScale(0.5,0.5)
 
     this.anims.create
     (
@@ -87,29 +100,14 @@ function create()
 
     cursors=this.input.keyboard.createCursorKeys();
 
-    stars=this.physics.add.group
-    (
-        {
-            key:'star',
-            repeat: 11,
-            setXY: {x:12,y:0,stepX:70}
-        }
-    );
-    stars.children.iterate(function(child)
-    {
-        child.setBounceY(Phaser.Math.FloatBetween(0.4,0.8));
-    })
-    this.physics.add.collider(stars,platforms);
-    this.physics.add.overlap(player,stars,collectStar,null,this);
-
     scoreText=this.add.text(16,16,'score: 0', {fontSize: '32px',fill: '#000'});
 
     bombs=this.physics.add.group();
     this.physics.add.collider(bombs,platforms);
     this.physics.add.collider(player,bombs,hitBomb,null,this);
+
+    this.time.addEvent({ delay: 2000, callback: spawnBomb, callbackScope: this, loop: true });
 }
-
-
 function update()
 {
     if(cursors.left.isDown)
@@ -131,35 +129,30 @@ function update()
     {
         player.setVelocityY(-330);
     }
+	if(cursors.space.isDown)
+	{
+		spawnBomb();
+	}
 }
-function collectStar(player,star)
+function spawnBomb()
 {
-    star.disableBody(true,true);
-    score+=10;
-    scoreText.setText('Score: '+score);
+    console.log(Phaser.Time.time);
+    var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
 
-    if (stars.countActive(true) === 0)
-    {
-        stars.children.iterate
-        (
-            function (child) 
-            {
-                child.enableBody(true, child.x, 0, true, true);
-            }    
-        );
-    }
-        var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-
-    var bomb = bombs.create(x, 16, 'bomb');
-    bomb.setBounce(1);
+    var bomb = bombs.create(0, 100, 'bomb');
+    bomb.setBounce(0.9);
     bomb.setCollideWorldBounds(true);
-    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+    //bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+    bomb.setVelocity(200,20);
+}
+function destroyBomb(bomb)
+{
+    bomb.destroy();
 }
 function hitBomb(player,bomb)
 {
     this.physics.pause();
     player.setTint(0xff0000);
     player.anims.play('turn');
-    gameOver=true;
     scoreText.setText('Game Over');
 }
