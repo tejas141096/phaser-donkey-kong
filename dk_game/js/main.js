@@ -62,17 +62,17 @@ var GameState = {
 
 
 
-        /*
-    
-        This data hee has moved to level.json file in order to use for adding new levels to the game
-          //creating a group of platforms
-        //start with a data array with x and y locations initiated on line 67
-        // var platformData = [
-        //   {"x": 0, "y": 430},
-        //   {"x": 45, "y": 550},
-        //   {"x": 90, "y": 290},
-        //   {"x": 0, "y": 140}
-        // ];*/
+        // Level design data in level.json file
+
+        // this.platform = this.add.sprite(0, 300, 'platform');
+        // this.game.physics.arcade.enable(this.platform);
+        // this.platform.body.allowGravity = false;
+        // this.platform.body.immovable = true;
+        //
+        // this.platform2 = this.add.sprite(50, 400, 'platform');
+        // this.game.physics.arcade.enable(this.platform2);
+        // this.platform2.body.allowGravity = false;
+        // this.platform2.body.immovable = true;
 
         // Then create a group of platforms
 
@@ -99,17 +99,6 @@ var GameState = {
         this.fires.setAll('body.allowGravity', false);
 
 
-        // this.platform = this.add.sprite(0, 300, 'platform');
-        // this.game.physics.arcade.enable(this.platform);
-        // this.platform.body.allowGravity = false;
-        // this.platform.body.immovable = true;
-        //
-        // this.platform2 = this.add.sprite(50, 400, 'platform');
-        // this.game.physics.arcade.enable(this.platform2);
-        // this.platform2.body.allowGravity = false;
-        // this.platform2.body.immovable = true;
-
-
         // create the goal here which is to make it to the gorrila
 
         this.goal = this.add.sprite(this.levelData.goal.x, this.levelData.goal.y, 'goal');
@@ -126,8 +115,6 @@ var GameState = {
         // adding camera follow
 
         this.game.camera.follow(this.player);
-
-
 
         // adding custom onscreen control
 
