@@ -1,3 +1,8 @@
+/**
+ * @author Tejas Ved <tejas.manish.ved@gmail.com>
+ */
+
+
 // this game will use a 2d game engine
 
 
