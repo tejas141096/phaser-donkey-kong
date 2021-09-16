@@ -21,7 +21,7 @@ var GameState = {
         // create a constant variable that can be adjusted for all code that uses it here
 
         this.RUNNING_SPEED = 180;
-        this.JUMPING_SPEED = 550;
+        this.JUMPING_SPEED = 600;
 
 
 
