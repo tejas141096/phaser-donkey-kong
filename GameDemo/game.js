@@ -9,7 +9,7 @@ var config=
         arcade:
         {
             gravity: {y:300},
-            debug: false
+            debug: true
         }
     },
     scene:
@@ -31,10 +31,10 @@ var bombs;
 var gameOver;
 function preload()
 {
-    this.load.image('sky','assets/sky.png');
-    this.load.image('ground','assets/platform.png');
-    this.load.image('star','assets/star.png');
-    this.load.image('bomb','assets/bomb.png');
+    this.load.spritesheet('sky','assets/sky.png',{frameWidth: 800, frameHeight: 600});
+    this.load.spritesheet('ground','assets/platform.png',{frameWidth: 400, frameHeight: 32});
+    this.load.spritesheet('star','assets/star.png',{frameWidth: 24, frameHeight: 22});
+    this.load.spritesheet('bomb','assets/bomb.png',{frameWidth: 14, frameHeight: 14});
     this.load.spritesheet('dude','assets/dude.png',{frameWidth: 32, frameHeight: 48});
 }
 
@@ -42,15 +42,17 @@ function create()
 {
     this.add.image(400,300,'sky');
 
-    platforms=this.physics.add.staticGroup();
-    platforms.create(400,568,'ground').setScale(2).refreshBody();
+    platforms=this.physics.add.sprite(200,400, 'ground');
+    platforms.angle += 30;
+    // platforms.create(400,568,'ground').setScale(2).refreshBody();
 
-    platforms.create(600,450,'ground');
-    platforms.create(50,250,'ground');
-    platforms.create(100,400,'ground');
-    platforms.create(0,100,'ground');
-    platforms.create(750,300,'ground');
-    platforms.create(800,150,'ground');
+    // platforms.create(600,450,'ground');
+    // platforms.create(50,250,'ground');
+    // platforms.create(100,400,'ground');
+    // platforms.create(0,100,'ground');
+    // platforms.create(750,300,'ground');
+    // platforms.create(800,150,'ground');
+    
 
     player=this.physics.add.sprite(100,450,'dude');
     player.setBounce(0.2);
