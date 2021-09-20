@@ -3,7 +3,7 @@
  */
 
 // this game will use a 2d game engine
-var GameState = {
+var MainGame = {
     init: function () {
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         this.scale.pageAlignHorizontally = true;
@@ -365,13 +365,13 @@ var GameState = {
     // our kill player function
     killPlayer: function (player, fire) {
         console.log('ouch!');
-        game.state.start('GameState');
+        game.state.start('MainGame');
     },
 
     // our win function
     win: function (player, goal) {
         alert('we have a winner!');
-        game.state.start('GameState');
+        game.state.start('MainGame');
     },
 
     createBarrel: function () {
@@ -400,7 +400,7 @@ var GameState = {
 
 //initiate the Phaser Framework
 //var game = new Phaser.Game(360, 592, Phaser.AUTO);
-var game=new Phaser.Game(800,960,Phaser.AUTO);
+// var game=new Phaser.Game(800,960,Phaser.AUTO);
 
-game.state.add('GameState', GameState);
-game.state.start('GameState');
+// game.state.add('MainGame', MainGame);
+// game.state.start('MainGame');
