@@ -196,8 +196,8 @@ var GameState = {
         }
             
         // collision detection with player and fires
-        //  this.game.physics.arcade.overlap(this.player, this.fires, this.killPlayer);
-        //  this.game.physics.arcade.overlap(this.player, this.barrels, this.killPlayer);
+        this.game.physics.arcade.overlap(this.player, this.fires, this.killPlayer);
+        this.game.physics.arcade.overlap(this.player, this.barrels, this.killPlayer);
 
         this.game.physics.arcade.overlap(this.player, this.goal, this.win);
         // listen for key control of player. setting velocity to 0 so that the player object doesn't continue int he same direction and reverts back to a velocity of zero when the cursor key is nnot pressed anymore
