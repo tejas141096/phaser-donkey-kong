@@ -18,7 +18,7 @@ var MainGame = {
 
         //set game boundaries. This can be larger than the viewable area
         //this.game.world.setBounds(0, 0/* from top left*/, 360/* x*/, 700/* y*/)
-        this.game.world.setBounds(0, 0/* from top left*/, 800/* x*/, 10000/* y*/)
+        this.game.world.setBounds(0, 0 /* from top left*/ , 800 /* x*/ , 10000 /* y*/ )
         // create a constant variable that can be adjusted for all code that uses it here
 
         this.RUNNING_SPEED = 150;
@@ -44,6 +44,7 @@ var MainGame = {
         this.load.image('platform10', 'assets/images/G10.png');
         this.load.image('platform11', 'assets/images/G11.png');
         this.load.image('platform12', 'assets/images/G12.png');
+        this.load.image('water', 'assets/images/water.png');
 
         this.load.spritesheet('fire', 'assets/images/fire_spritesheet.png', 20, 21, 2, 1, 1);
         this.load.spritesheet('player', 'assets/images/player_spritesheet2.png', 62.6, 95, 6);
@@ -106,7 +107,7 @@ var MainGame = {
         this.goal.body.allowGravity = false;
 
         //adding player with animation
-        this.player = this.add.sprite(this.levelData.playerStart.x /* this is from the level.json file*/, this.levelData.playerStart.y, 'player', 3);
+        this.player = this.add.sprite(this.levelData.playerStart.x /* this is from the level.json file*/ , this.levelData.playerStart.y, 'player', 3);
         this.player.anchor.setTo(0.5);
         this.player.animations.add('walking', [2, 3, 4, 5], 6, true);
         this.player.animations.add('idle', [0, 1], 3, true);
@@ -166,9 +167,9 @@ var MainGame = {
         this.DetectStairOverlap();
         // always use collision detection in the update method to ensure it is checked all the time and not jsut once
         // collision detection with player and ground
-        if (!(this.player.customParams.isOnStair
-            && (this.cursors.up.isDown
-                || game.input.keyboard.isDown(Phaser.Keyboard.DOWN)))) {
+        if (!(this.player.customParams.isOnStair &&
+                (this.cursors.up.isDown ||
+                    game.input.keyboard.isDown(Phaser.Keyboard.DOWN)))) {
             this.game.physics.arcade.collide(this.player, this.ground);
             this.game.physics.arcade.collide(this.player, this.platforms);
         }
@@ -182,8 +183,7 @@ var MainGame = {
             this.game.physics.arcade.overlap(this.hammer1, this.barrels, this.KillBarrel);
             this.game.physics.arcade.overlap(this.hammer2, this.barrels, this.KillBarrel);
             this.game.physics.arcade.overlap(this.hammer3, this.barrels, this.KillBarrel);
-        }
-        else {
+        } else {
             //collision detection with hammer and barrel in order to pick hammer
             if (this.game.physics.arcade.overlap(this.player, this.hammer1, this.PickUpHammer)) {
                 this.player.customParams.currentHammer = 1;
@@ -207,14 +207,14 @@ var MainGame = {
         if (this.cursors.left.isDown || this.player.customParams.isMovingLeft) {
             this.player.body.velocity.x = -this.RUNNING_SPEED;
             this.player.scale.setTo(-1, 1); // setting scale or direction of player back
-            this.player.play('walking');// player animation
-            this.player.customParams.isFacingRight = false;//set facing state
+            this.player.play('walking'); // player animation
+            this.player.customParams.isFacingRight = false; //set facing state
             this.player.customParams.isFacingLeft = true;
         } else if (this.cursors.right.isDown || this.player.customParams.isMovingRight) {
             this.player.body.velocity.x = this.RUNNING_SPEED;
-            this.player.scale.setTo(1, 1);// set sprite to flip over to the other side x axis
+            this.player.scale.setTo(1, 1); // set sprite to flip over to the other side x axis
             this.player.play('walking');
-            this.player.customParams.isFacingRight = true;//set facing state
+            this.player.customParams.isFacingRight = true; //set facing state
             this.player.customParams.isFacingLeft = false;
         } else {
             this.player.play('idle');
@@ -379,13 +379,12 @@ var MainGame = {
     },
 
     createBarrel: function () {
-        var barrel = this.barrels.getFirstExists(false);// get first dead barrel object
+        var barrel = this.barrels.getFirstExists(false); // get first dead barrel object
 
         if (!barrel) { // if dead barrel isn't there make new barrel
             if (this.player.y > 2300) {
                 barrel = this.barrels.create(20, 1800, 'barrel');
-            }
-            else {
+            } else {
                 barrel = this.barrels.create(20, 0, 'barrel'); // if no barrel present then create it
             }
         }

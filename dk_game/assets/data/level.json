@@ -53,6 +53,6 @@
   "hammer3":{"x":100,"y":390},
   "goal":
     {"x": 20, "y": 50},
-  "barrelFrequency":  2,
+  "barrelFrequency":  1,
   "barrelSpeed":  220
 }
