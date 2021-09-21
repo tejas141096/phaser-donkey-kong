@@ -21,7 +21,7 @@ var MainGame = {
         this.game.world.setBounds(0, 0/* from top left*/, 800/* x*/, 10000/* y*/)
         // create a constant variable that can be adjusted for all code that uses it here
 
-        this.RUNNING_SPEED = 150;
+        this.RUNNING_SPEED = 300;
         this.JUMPING_SPEED = 550;
     },
     preload: function () {
@@ -31,6 +31,8 @@ var MainGame = {
         this.load.image('barrel', 'assets/images/barrel.png');
         this.load.image('goal', 'assets/images/gorilla3.png');
         this.load.image('stair','assets/images/Stair.png');
+        this.load.image('rope','assets/images/rope.png')
+        this.load.image('hook','assets/images/hook.png')
         this.load.image('platform', 'assets/images/platform.png');
         this.load.image('ground', 'assets/images/G1.png');
         this.load.image('platform2','assets/images/G2.png');
@@ -50,7 +52,6 @@ var MainGame = {
         this.load.text('level', 'assets/data/level.json');
 
         this.load.spritesheet('hammer','assets/images/hammer_spritesheet.png',23,36,3);
-        this.load.tilemap('tilemap','assets/data/kongtest.json',null, Phaser.Tilemap.TILED_JSON);
     },
 
     create: function () {
@@ -108,8 +109,8 @@ var MainGame = {
         //adding player with animation
         this.player = this.add.sprite(this.levelData.playerStart.x /* this is from the level.json file*/, this.levelData.playerStart.y, 'player', 3);
         this.player.anchor.setTo(0.5);
-        this.player.animations.add('walking', [2, 3, 4, 5], 6, true);
-        this.player.animations.add('idle', [0, 1], 3, true);
+        this.player.animations.add('walking', [2, 3, 4, 5], 10, true);
+        this.player.animations.add('idle', [0, 1], 4, true);
 
         this.game.physics.arcade.enable(this.player);
         this.player.customParams = {}; // adding default empty custom params for now
@@ -119,6 +120,18 @@ var MainGame = {
         this.player.customParams.isFacingLeft=false;
         this.player.customParams.isFacingRight=true;
         this.player.customParams.currentHammer=0;
+        this.player.customParams.ropeCount=0;
+        this.player.customParams.sentHook=false;
+        this.player.customParams.needMove=false;
+
+        //set hook
+        this.hook=this.add.sprite(this.player.x,this.player.y,'hook');
+        this.hook.visible=false;
+        this.hook.anchor.setTo(0,1);
+        this.game.physics.arcade.enable(this.hook);
+        this.hook.body.enable = false;
+        this.hook.body.allowGravity = false;
+        this.hook.targetPositionY=0;
 
         //set hammer with animation
         //hammer's cout are three
@@ -143,6 +156,16 @@ var MainGame = {
         this.hammer3.body.allowGravity = false;
         this.hammer3.frame=1;
         
+        //set rope for player to pick
+        this.ropes=this.add.group();
+        this.ropes.enableBody = true;
+
+        this.levelData.ropeData.forEach(function (element) {
+            rope = this.ropes.create(element.x, element.y, 'rope');
+            rope.scale.setTo(0.5,0.5);
+        }, this);
+        this.ropes.setAll('body.allowGravity', false);
+
         // adding camera follow
         this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
         this.game.camera.deadzone = new Phaser.Rectangle(400, 480, 800, 10);
@@ -195,11 +218,18 @@ var MainGame = {
             }
         }
             
-        // collision detection with player and fires
+        // collision detection with player and fire
         this.game.physics.arcade.overlap(this.player, this.fires, this.killPlayer);
+        // collision detection with player and barrel
         this.game.physics.arcade.overlap(this.player, this.barrels, this.killPlayer);
 
+        //collision detection with player and rope
+        this.game.physics.arcade.overlap(this.player, this.ropes, this.PickRope);
+        this.game.debug.text("rope count: "+this.player.customParams.ropeCount,50,50);
+
+        //collision detection with player and goal
         this.game.physics.arcade.overlap(this.player, this.goal, this.win);
+
         // listen for key control of player. setting velocity to 0 so that the player object doesn't continue int he same direction and reverts back to a velocity of zero when the cursor key is nnot pressed anymore
         this.player.body.velocity.x = 0;
 
@@ -233,6 +263,43 @@ var MainGame = {
         }
         if(game.input.keyboard.isDown(Phaser.Keyboard.DOWN) && this.player.customParams.isOnStair) {
             this.player.body.velocity.y=150;
+        }
+
+        //if player has rope and press SPACEBAR, sent the hook
+        if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && this.player.customParams.ropeCount>0){
+            this.player.sentHook=true;
+            this.hook.body.enable = true;
+            this.hook.body.allowGravity = false;
+        }
+        //if player release SPACEBAR, cancel sent hook
+        if(this.player.sentHook==true&&!game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
+            this.hook.scale.setTo(1,1);
+            this.player.sentHook=false;
+            this.hook.body.enable = false;
+            this.hook.visible=false;
+        }
+        this.hook.position.setTo(this.player.x,this.player.y);
+        //send the hook while player is pressing SPACEBAR
+        if(this.player.sentHook==true){
+            this.hook.visible=true;
+            this.hook.scale.setTo(1,this.hook.scale.y*1.08);
+        }
+        //if the hook reach platform, change player's position to there.
+        if(this.game.physics.arcade.overlap(this.hook, this.platforms, this.MovePlayer))
+        {
+            this.player.customParams.needMove=true;
+            this.hook.visible=false;
+            this.hook.body.enable = false;
+            this.hook.scale.setTo(1,1);
+            this.player.sentHook=false;
+            this.player.customParams.ropeCount--;
+        }
+        if(this.player.customParams.needMove==true)
+        {
+            this.player.y-=20;
+            if(this.player.y<this.hook.targetPositionY-50){
+                this.player.customParams.needMove=false;
+            }
         }
 
         if(this.player.customParams.isHoldHammer){
@@ -339,6 +406,9 @@ var MainGame = {
         }, this); 
         this.player.customParams.isOnStair=temp;
     },
+    MovePlayer:function(hook,platforms){
+        hook.targetPositionY=platforms.y;
+    },
     KillBarrel:function(hammer,barrels){
         console.log('kill barrel');
         barrels.kill();
@@ -362,6 +432,10 @@ var MainGame = {
         },game);
     },
     
+    PickRope: function(player, rope){
+        rope.kill();
+        player.customParams.ropeCount++;
+    },
     // our kill player function
     killPlayer: function (player, fire) {
         console.log('ouch!');
