@@ -24,7 +24,7 @@ var MainGame = {
         // create a constant variable that can be adjusted for all code that uses it here
 
         this.RUNNING_SPEED = 150;
-        this.JUMPING_SPEED = 550;
+        this.JUMPING_SPEED = 500;
     },
 
     preload: function () {
@@ -156,6 +156,7 @@ var MainGame = {
         this.game.physics.arcade.enable(this.hammer2);
         this.hammer2.body.allowGravity = false;
         this.hammer2.frame = 1;
+        this.hammer2.scale.setTo(3,3);
 
         this.hammer3 = this.add.sprite(this.levelData.hammer3.x, this.levelData.hammer3.y, 'hammer');
         this.hammer3.animations.add('hammer');
@@ -163,6 +164,7 @@ var MainGame = {
         this.game.physics.arcade.enable(this.hammer3);
         this.hammer3.body.allowGravity = false;
         this.hammer3.frame = 1;
+        this.hammer3.scale.setTo(3,3);
 
         //set rope for player to pick
         this.ropes=this.add.group();
@@ -202,7 +204,7 @@ var MainGame = {
 
         tween.to({
             y: this.levelData.ground.y - 10000
-        }, 900000, Phaser.Easing.Exponential.Out, true, 0);
+        }, 1050000, Phaser.Easing.Exponential.Out, true, 0);
 
     },
 
@@ -335,17 +337,17 @@ var MainGame = {
                     this.hammer1.body.x = this.player.body.x - 30;
                     this.hammer1.body.y = this.player.body.y - 10;
                     this.hammer1.anchor.setTo(0, 0.5);
-                    this.hammer1.scale.setTo(1, 1);
+                    this.hammer1.scale.setTo(3, 3);
                 } else if (this.player.customParams.currentHammer == 2) {
                     this.hammer2.body.x = this.player.body.x - 30;
                     this.hammer2.body.y = this.player.body.y - 10;
                     this.hammer2.anchor.setTo(0, 0.5);
-                    this.hammer2.scale.setTo(1, 1);
+                    this.hammer2.scale.setTo(3, 3);
                 } else if (this.player.customParams.currentHammer == 3) {
                     this.hammer3.body.x = this.player.body.x - 30;
                     this.hammer3.body.y = this.player.body.y - 10;
                     this.hammer3.anchor.setTo(0, 0.5);
-                    this.hammer3.scale.setTo(1, 1);
+                    this.hammer3.scale.setTo(3, 3);
                 }
             }
             if (this.player.customParams.isFacingRight) {
@@ -353,17 +355,17 @@ var MainGame = {
                     this.hammer1.body.x = this.player.body.x + 30;
                     this.hammer1.body.y = this.player.body.y - 10;
                     this.hammer1.anchor.setTo(0.5, 0.5);
-                    this.hammer1.scale.setTo(-1, 1);
+                    this.hammer1.scale.setTo(-3, 3);
                 } else if (this.player.customParams.currentHammer == 2) {
                     this.hammer2.body.x = this.player.body.x + 30;
                     this.hammer2.body.y = this.player.body.y - 10;
                     this.hammer2.anchor.setTo(0.5, 0.5);
-                    this.hammer2.scale.setTo(-1, 1);
+                    this.hammer2.scale.setTo(-3, 3);
                 } else if (this.player.customParams.currentHammer == 3) {
                     this.hammer3.body.x = this.player.body.x + 30;
                     this.hammer3.body.y = this.player.body.y - 10;
                     this.hammer3.anchor.setTo(0.5, 0.5);
-                    this.hammer3.scale.setTo(-1, 1);
+                    this.hammer3.scale.setTo(-3, 3);
                 }
             }
         }
