@@ -164,19 +164,6 @@ var MainGame = {
         this.hammer3.body.allowGravity = false;
         this.hammer3.frame = 1;
 
-        // Water Creation
-        this.water = this.add.sprite(this.levelData.ground.x, this.levelData.ground.y + 50, 'water');
-        this.water.scale.x = 1.5;
-        this.water.alpha = 1;
-        // this.water.scale.setTo(, );
-        this.game.physics.arcade.enable(this.water);
-
-        var tween = this.add.tween(this.water);
-
-        tween.to({
-            y: this.levelData.ground.y - 10000
-        }, 900000, Phaser.Easing.Exponential.Out, true, 0);
-
         //set rope for player to pick
         this.ropes=this.add.group();
         this.ropes.enableBody = true;
@@ -203,6 +190,20 @@ var MainGame = {
         //create a loop for barrels to roll down the map
         this.createBarrel(); // initial barrel created before the 5 second counter loop starts
         this.barrelCreator = this.game.time.events.loop(Phaser.Timer.SECOND * this.levelData.barrelFrequency, this.createBarrel, this);
+
+        // Water Creation
+        this.water = this.add.sprite(this.levelData.ground.x, this.levelData.ground.y + 50, 'water');
+        this.water.scale.x = 1.5;
+        this.water.alpha = 0.75;
+        // this.water.scale.setTo(, );
+        this.game.physics.arcade.enable(this.water);
+
+        var tween = this.add.tween(this.water);
+
+        tween.to({
+            y: this.levelData.ground.y - 10000
+        }, 900000, Phaser.Easing.Exponential.Out, true, 0);
+
     },
 
     update: function () {
