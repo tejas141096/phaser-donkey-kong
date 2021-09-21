@@ -26,6 +26,7 @@ var MainGame = {
         this.RUNNING_SPEED = 150;
         this.JUMPING_SPEED = 550;
     },
+
     preload: function () {
         // Load the game assets here before the game will start
         this.load.image('actionButton', 'assets/images/actionButton.png');
@@ -50,7 +51,8 @@ var MainGame = {
 
         this.load.spritesheet('fire', 'assets/images/fire_spritesheet.png', 20, 21, 2, 1, 1);
         this.load.spritesheet('player', 'assets/images/player_spritesheet2.png', 62.6, 95, 6);
-        
+        this.load.image('pc', 'assets/images/G6.png');
+
         this.load.text('level', 'assets/data/level.json');
 
         this.load.spritesheet('hammer', 'assets/images/hammer_spritesheet.png', 23, 36, 3);
@@ -88,10 +90,13 @@ var MainGame = {
         this.water = this.add.sprite(this.levelData.ground.x - 100, this.levelData.ground.y - 50, 'water');
         this.water.alpha = 0.5;
         this.water.scale.setTo(7, 10);
+        this.game.physics.arcade.enable(this.water);
 
         var tween = this.add.tween(this.water);
 
-        tween.to({y: this.levelData.ground.y - 10000}, 300000 , "Linear", true, 0);
+        tween.to({
+            y: this.levelData.ground.y - 10000
+        }, 300000, "Linear", true, 0);
 
         // Then create a group of stairs
         this.stairs = this.add.group();
@@ -190,6 +195,8 @@ var MainGame = {
         // collision detection with barrel and ground
         this.game.physics.arcade.collide(this.barrels, this.ground);
         this.game.physics.arcade.collide(this.barrels, this.platforms);
+
+        this.game.physics.arcade.collide(this.player, this.water, this.killPlayer);
 
         if (this.player.customParams.isHoldHammer) {
             //collision detection with hammer and barrel
