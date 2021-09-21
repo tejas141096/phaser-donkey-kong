@@ -48,6 +48,7 @@ var MainGame = {
 
         this.load.spritesheet('fire', 'assets/images/fire_spritesheet.png', 20, 21, 2, 1, 1);
         this.load.spritesheet('player', 'assets/images/player_spritesheet2.png', 62.6, 95, 6);
+        
         this.load.text('level', 'assets/data/level.json');
 
         this.load.spritesheet('hammer', 'assets/images/hammer_spritesheet.png', 23, 36, 3);
@@ -79,6 +80,16 @@ var MainGame = {
         this.platforms.create(-750, 700, 'platform9');
         this.platforms.setAll('body.immovable', true); // set phisics for platform group
         this.platforms.setAll('body.allowGravity', false);
+
+
+
+        this.water = this.add.sprite(this.levelData.ground.x - 100, this.levelData.ground.y - 50, 'water');
+        this.water.alpha = 0.5;
+        this.water.scale.setTo(7, 10);
+
+        var tween = this.add.tween(this.water);
+
+        tween.to({y: this.levelData.ground.y - 10000}, 300000 , "Linear", true, 0);
 
         // Then create a group of stairs
         this.stairs = this.add.group();
