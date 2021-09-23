@@ -523,7 +523,7 @@ var MainGame = {
     // our kill player function
     killPlayerWater: function () {
         console.log('drown!');
-        game.state.start('MainGame');
+        game.state.start('EndGameLose');
     },
 
     killPlayer: function (player, fire) {
@@ -531,13 +531,13 @@ var MainGame = {
         fire.kill();
         player.customParams.health -= 10;
         if (player.customParams.health <= 0)
-            game.state.start('MainGame');
+            game.state.start('EndGameLose');
     },
 
     // our win function
     win: function (player, goal) {
-        alert('we have a winner!');
-        game.state.start('MainGame');
+        // alert('we have a winner!');
+        game.state.start('EndGameWin');
     },
 
     createBarrel: function () {
