@@ -49,7 +49,7 @@ var MainGame = {
         this.load.image('platform10', 'assets/images/G10.png');
         this.load.image('platform11', 'assets/images/G11.png');
         this.load.image('platform12', 'assets/images/G12.png');
-        this.load.image('water', 'assets/images/Water.gif');
+        this.load.image('water', 'assets/images/Water_2.png');
 
         this.load.spritesheet('fire', 'assets/images/fire_spritesheet.png', 20, 21, 2, 1, 1);
         this.load.spritesheet('player', 'assets/images/player_spritesheet.png', 69, 90, 26);
@@ -559,7 +559,8 @@ var MainGame = {
     },
 
     render: function () {
-        // game.debug.body(this.water);
+        game.debug.body(this.water);
+        game.debug.body(this.player);
     }
 };
 
