@@ -241,7 +241,7 @@ var MainGame = {
 
         tween.to({
             y: this.levelData.ground.y - 10000
-        }, this.levelData.waterSpeed, Phaser.Easing.Exponential.Out, true, 0);
+        }, this.levelData.waterSpeed, Phaser.Easing.Exponential.Out, true, 1000);
 
         // Music
         // music
