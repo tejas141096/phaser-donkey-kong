@@ -14,8 +14,8 @@
 
 var game = new Phaser.Game(800, 960, Phaser.AUTO);
 
-// game.state.add("Boot", boot);
-// game.state.add("Loading", loading);
-// game.state.add("GameTitle", gameTitle);
+game.state.add("Boot", boot);
+game.state.add("Loading", loading);
+game.state.add("MainMenu", MainMenu);
 game.state.add("MainGame", MainGame);
-game.state.start("MainGame");
+game.state.start("Boot");
