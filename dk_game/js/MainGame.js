@@ -563,8 +563,8 @@ var MainGame = {
     },
 
     render: function () {
-        game.debug.body(this.water);
-        game.debug.body(this.player);
+        // game.debug.body(this.water);
+        // game.debug.body(this.player);
     }
 };
 
