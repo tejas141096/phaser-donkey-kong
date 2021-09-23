@@ -196,6 +196,7 @@ var MainGame = {
         // Water Creation
         this.water = this.add.sprite(this.levelData.ground.x, this.levelData.ground.y + 200, 'water');
         this.water.scale.x = 1.5;
+        this.water.scale.y = 2;
         this.water.alpha = 0.75;
         // this.water.scale.setTo(, );
         // this.game.physics.arcade.enable(this.water);

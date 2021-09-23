@@ -1,6 +1,5 @@
 var boot = {
-    init: function () {
-    },
+    init: function () {},
 
     preload: function () {
         game.load.image("loading", "assets/sprites/loading.png");
@@ -17,12 +16,10 @@ var boot = {
     }
 };
 
-
 var music;
 
 loading = {
-    init: function () {
-    },
+    init: function () {},
 
     preload: function () {
         var loadingBar = game.add.sprite(320, 560, "loading");
@@ -37,7 +34,7 @@ loading = {
         this.load.image('startButton', 'assets/images/startButton.png');
         game.load.spritesheet("snowflakes", "assets/sprites/snowflakes.png", 17, 17);
         game.load.spritesheet("snowflakes_large", "assets/sprites/snowflakes_large.png", 64, 64);
-        this.load.audio("music", "assets/sounds/music.wav");
+        this.load.audio("music", "assets/sounds/Main_theme_song.mp3");
     },
 
     create: function () {
@@ -50,8 +47,7 @@ var title;
 var subtitle;
 
 gameTitle = {
-    init: function () {
-    },
+    init: function () {},
 
     create: function () {
         game.add.image(0, 0, "background");
@@ -75,8 +71,8 @@ gameTitle = {
         subtitle.anchor.setTo(0.5);
         game.time.events.add(Phaser.Timer.SECOND * 4, this.showTitle, this);
         //
-        music = game.add.audio("music", 1, true);
-        music.play("", 0, 1, true);
+        music = game.add.audio("music");
+        music.play();
         //
         frontSnow = game.add.emitter(320, -32, 50);
         frontSnow.makeParticles("snowflakes_large", [0, 1, 2, 3, 4, 5]);
@@ -103,7 +99,14 @@ gameTitle = {
 
     },
 
+    update: function () {
+        this.game.input.onDown.addOnce(() => {
+            this.game.sound.context.resume();
+       });
+    },
+
     showTitle: function () {
+        music.resume();
         var titleTween = game.add.tween(title);
         titleTween.to({
             x: 320
