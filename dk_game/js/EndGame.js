@@ -1,3 +1,9 @@
+/**
+ * @author Tejas Ved <tejas.manish.ved@gmail.com>
+ */
+
+// End Game Scene code
+
 var EndGameWin = {
     init: function () {
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;

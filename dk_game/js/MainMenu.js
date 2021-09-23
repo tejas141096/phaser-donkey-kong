@@ -1,3 +1,9 @@
+/**
+ * @author Tejas Ved <tejas.manish.ved@gmail.com>
+ */
+
+// Main Menu Code
+
 var boot = {
     init: function () {},
 
@@ -23,7 +29,7 @@ var loading = {
         loadingBar.anchor.setTo(0.5);
         game.load.setPreloadSprite(loadingBar);
         var logo = game.add.sprite(320, 480, "logo").anchor.setTo(0.5);
-        this.load.audio("music", "assets/sounds/music.wav");
+        this.load.audio("music", "assets/sounds/Main_theme_song.mp3");
     },
 
     create: function () {
@@ -64,6 +70,10 @@ var MainMenu = {
         });
 
         if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+        {
+            music.destroy();
+            game.cache.removeSound("music");
             game.state.start("MainGame");
+        }
     }
 };

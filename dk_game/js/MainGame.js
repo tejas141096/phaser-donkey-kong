@@ -5,6 +5,11 @@
 // Game Code
 // this game will use a 2d game engine
 
+// var music_jump;
+// var music_walk;
+var music_damage;
+var music_powerup;
+
 var MainGame = {
     init: function () {
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -61,6 +66,11 @@ var MainGame = {
 
         this.load.spritesheet('hammer', 'assets/images/hammer_spritesheet.png', 23, 30, 3);
         // this.load.tilemap('tilemap', 'assets/data/kongtest.json', null, Phaser.Tilemap.TILED_JSON);
+
+        // this.load.audio("jump", "assets/sounds/jump.mp3");
+        // this.load.audio("walk", "assets/sounds/Pirate_Walking_Sound.mp3");
+        this.load.audio("damage", "assets/sounds/Player_gets_hit.mp3");
+        this.load.audio("powerup", "assets/sounds/Power_Up.mp3");
     },
 
     create: function () {
@@ -233,6 +243,12 @@ var MainGame = {
             y: this.levelData.ground.y - 10000
         }, this.levelData.waterSpeed, Phaser.Easing.Exponential.Out, true, 0);
 
+        // Music
+        // music
+        // music_walk = game.add.audio("walk", 1, true);
+        // music_jump = game.add.audio("jump", 1, true);
+        music_damage = game.add.audio("damage", 1, true);
+        music_powerup = game.add.audio("powerup", 1, true);
     },
 
     update: function () {
@@ -298,6 +314,7 @@ var MainGame = {
             this.hammer1.visible = true;
             this.hammer2.visible = true;
             this.hammer3.visible = true;
+            // music_walk.play();
         } else if (this.cursors.right.isDown || this.player.customParams.isMovingRight) {
             this.player.body.velocity.x = this.RUNNING_SPEED;
             this.player.scale.setTo(1, 1); // set sprite to flip over to the other side x axis
@@ -307,6 +324,7 @@ var MainGame = {
             this.hammer1.visible = true;
             this.hammer2.visible = true;
             this.hammer3.visible = true;
+            // music_walk.play();
         } else if (this.cursors.up.isDown && this.player.customParams.isOnStair) {
             this.player.body.velocity.y = -this.RUNNING_SPEED;
             this.player.play('climb');
@@ -315,6 +333,10 @@ var MainGame = {
             this.player.play('climb');
         } else {
             this.player.play('idle');
+            // music_walk.stop();
+            // music_jump.stop();
+            music_damage.stop();
+            music_powerup.stop();
             if (this.player.customParams.currentHammer == 1) {
                 this.hammer1.visible = false;
             } else if (this.player.customParams.currentHammer == 2) {
@@ -334,6 +356,7 @@ var MainGame = {
         if ((this.cursors.up.isDown || this.player.customParams.mustJump) && this.player.body.touching.down) {
             this.player.body.velocity.y = -this.JUMPING_SPEED;
             this.player.customParams.mustJump = false;
+            // music_jump.play();
         }
 
 
@@ -497,6 +520,7 @@ var MainGame = {
     },
 
     PickUpHammer: function (player, hammer) {
+        music_powerup.play();
         player.customParams.isHoldHammer = true;
         hammer.animations.play('hammer', 10, true);
         //kill the hammer in 10s
@@ -517,6 +541,7 @@ var MainGame = {
 
     PickRope: function (player, rope) {
         rope.kill();
+        music_powerup.play();
         player.customParams.ropeCount++;
     },
 
@@ -530,13 +555,31 @@ var MainGame = {
         console.log('ouch!');
         fire.kill();
         player.customParams.health -= 10;
-        if (player.customParams.health <= 0)
+        music_damage.play();
+        if (player.customParams.health <= 0) {
+            // music_walk.destroy();
+            // music_jump.destroy();
+            music_damage.destroy();
+            music_powerup.destroy();
+            // game.cache.removeSound("walk");
+            // game.cache.removeSound("jump");
+            game.cache.removeSound("damage");
+            game.cache.removeSound("powerup");
             game.state.start('EndGameLose');
+        }
     },
 
     // our win function
     win: function (player, goal) {
         // alert('we have a winner!');
+        // music_walk.destroy();
+        // music_jump.destroy();
+        music_damage.destroy();
+        music_powerup.destroy();
+        // game.cache.removeSound("walk");
+        // game.cache.removeSound("jump");
+        game.cache.removeSound("damage");
+        game.cache.removeSound("powerup");
         game.state.start('EndGameWin');
     },
 
